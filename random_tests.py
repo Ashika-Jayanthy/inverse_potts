@@ -12,19 +12,20 @@ nseqs, min_length, max_length = 250, 500, 700
 num_runs = 100
 correlations = []
 
-hinit = np.ones((nseqs, max_length))
-if periodic_boundary_conditions:
-    Jinit = np.ones((nseqs, max_length))
-else:
-    Jinit = np.ones((nseqs, max_length - 1))
 
 
 for nr in range(num_runs):
     print(nr)
     random_transcriptome = [DNA(l) for l in np.random.choice(
         np.arange(min_length, max_length), size=nseqs, replace=True)]
-    counts = np.random.choice(np.arange(0, 900), size=nseqs, replace=True)
+    counts = np.random.choice(np.arange(0, 100), size=nseqs, replace=True)
     true_probabilities = counts / np.sum(counts)
+
+    hinit = np.ones((nseqs, max_length))
+    if periodic_boundary_conditions:
+        Jinit = np.ones((nseqs, max_length))
+    else:
+        Jinit = np.ones((nseqs, max_length - 1))
 
     if periodic_boundary_conditions:
         transcriptome_spins = np.zeros((len(random_transcriptome), max_length))
@@ -56,7 +57,7 @@ for nr in range(num_runs):
 
     masked_values = (masked_spins, masked_pairs)
     random_cell = InferHJ(transcriptome_spins=transcriptome_spins, transcriptome_pairs=transcriptome_pairs, masked_arrays=masked_values,
-                          counts=counts, h_init=hinit, J_init=Jinit, k=1e-7, e1=[1e2, 2e2, 0, -2e2, -1e2], e2=[5e1, 1e2, 2e2, 0, -2e2, -1e2, 5e1], max_runs=100)
+                          counts=counts, h_init=hinit, J_init=Jinit, k=1e-7, e1=[1e2, 2e2, 0, -2e2, -1e2], e2=[5e1, 1e2, 2e2, 0, -2e2, -1e2, -5e1], max_runs=100)
     h, J, E, P = random_cell.run_inference()
     corr = pearsonr(true_probabilities, P)
     correlations.append(corr[0])
