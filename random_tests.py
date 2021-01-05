@@ -43,10 +43,6 @@ for nr in range(num_runs):
             transcriptome_spins[n, 0:len(seq)] = spins
             transcriptome_pairs[n, 0:len(
                 seq) - 1] = pair_corr(spins, periodic_boundary_conditions=False)
-    for n, seq in enumerate(random_transcriptome):
-        spins = sequence_to_spins(seq)
-        transcriptome_spins[n, 0:len(seq)] = spins
-        transcriptome_pairs[n, 0:len(spins) - 1] = pair_corr(spins)
 
     masked_spins = []
     for i in [-2, -1, 0, 1, 2]:
@@ -71,5 +67,5 @@ for nr in range(num_runs):
 sns.distplot(correlations)
 plt.title("Correlations between true and inferred probabilities")
 plt.xlabel("Pearsons correlation")
-# plt.savefig("RandomSeqs_Correlations.pdf")
+plt.savefig("RandomSeqs_Correlations.pdf")
 plt.show()
